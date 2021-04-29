@@ -1,16 +1,29 @@
 // script.js
 
 const img = new Image(); // used to load image from <input> and draw to canvas
-const selectedFile = document.getElementById('image-input');
+const selectedFile = document.getElementById("image-input");
+const form = document.getElementById("generate-meme");
+const canvas = document.getElementById("user-image");
+const ctx = canvas.getContext("2d");
+ctx.font = "30px Arial";
 
-selectedFile.addEventListener('change', handleFiles, false);
+selectedFile.addEventListener("change", handleFiles, false);
 function handleFiles() {
   img.alt = selectedFile.files[0].name;
   img.src = URL.createObjectURL(selectedFile.files[0]);
 }
 
+form.addEventListener("submit", (event) => {
+  let textTop = document.getElementById("text-top").value;
+  let textBottom = document.getElementById("text-bottom").value;
+  ctx.fillText(textTop, canvas.width / 2, 50);
+  ctx.fillText(textBottom, canvas.width / 2, canvas.height - 20);
+  console.log("this happened");
+  event.preventDefault(); // no refresh upon form submit
+});
+
 // Fires whenever the img object loads a new image (such as with img.src =)
-img.addEventListener('load', () => {
+img.addEventListener("load", () => {
   // TODO
 
   // Some helpful tips:
@@ -18,13 +31,23 @@ img.addEventListener('load', () => {
   // - Clear the form when a new image is selected
   // - If you draw the image to canvas here, it will update as soon as a new image is selected
 
-  const canvas = document.getElementById('user-image');
-  const ctx = canvas.getContext('2d');
-  ctx.fillStyle = 'black';
+  ctx.fillStyle = "black";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-  let dimensions = getDimmensions(canvas.width, canvas.height, img.width, img.height);
-  ctx.drawImage(img, dimensions.startX, dimensions.startY, dimensions.width, dimensions.height);
+  let dimensions = getDimmensions(
+    canvas.width,
+    canvas.height,
+    img.width,
+    img.height
+  );
+  console.log("yes");
+  ctx.drawImage(
+    img,
+    dimensions.startX,
+    dimensions.startY,
+    dimensions.width,
+    dimensions.height
+  );
 });
 
 /**
@@ -64,5 +87,5 @@ function getDimmensions(canvasWidth, canvasHeight, imageWidth, imageHeight) {
     startY = (canvasHeight - height) / 2;
   }
 
-  return { 'width': width, 'height': height, 'startX': startX, 'startY': startY }
+  return { width: width, height: height, startX: startX, startY: startY };
 }
