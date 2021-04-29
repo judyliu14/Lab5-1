@@ -18,6 +18,12 @@ form.addEventListener("submit", (event) => {
   let textBottom = document.getElementById("text-bottom").value;
   ctx.fillText(textTop, canvas.width / 2, 50);
   ctx.fillText(textBottom, canvas.width / 2, canvas.height - 20);
+  // disable the generate button
+  form.childNodes[10].disabled = true;
+  // enable the clear, read text, and voice selection select
+  document.getElementById("button-group").childNodes[1].disabled = false;
+  document.getElementById("button-group").childNodes[3].disabled = false;
+  document.getElementById("voice-selection").disabled = false;
   event.preventDefault(); // no refresh upon form submit
 });
 
