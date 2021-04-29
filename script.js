@@ -18,7 +18,6 @@ form.addEventListener("submit", (event) => {
   let textBottom = document.getElementById("text-bottom").value;
   ctx.fillText(textTop, canvas.width / 2, 50);
   ctx.fillText(textBottom, canvas.width / 2, canvas.height - 20);
-  console.log("this happened");
   event.preventDefault(); // no refresh upon form submit
 });
 
@@ -40,7 +39,7 @@ img.addEventListener("load", () => {
     img.width,
     img.height
   );
-  console.log("yes");
+
   ctx.drawImage(
     img,
     dimensions.startX,
