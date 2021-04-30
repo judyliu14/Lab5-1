@@ -65,6 +65,9 @@ clear.onclick = () => {
 read.onclick = () => {
   let textTop = document.getElementById("text-top").value;
   let textBottom = document.getElementById("text-bottom").value;
+  // read
+  let topUtter = new SpeechSynthesisUtterance(textTop);
+  let bottomUtter = new SpeechSynthesisUtterance(textBottom);
 
   console.log(voiceSelection);
   var selectedOption = voiceSelection.selectedOptions[0].getAttribute(
@@ -73,14 +76,11 @@ read.onclick = () => {
   console.log(selectedOption);
   for (let i = 0; i < voices.length; i++) {
     if (voices[i].name === selectedOption) {
-      textTop.voice = voices[i];
-      textBottom.voice = voices[i];
+      topUtter.voice = voices[i];
+      bottomUtter.voice = voices[i];
     }
   }
 
-  // read
-  let topUtter = new SpeechSynthesisUtterance(textTop);
-  let bottomUtter = new SpeechSynthesisUtterance(textBottom);
   speechSynthesis.speak(topUtter);
   speechSynthesis.speak(bottomUtter);
 };
