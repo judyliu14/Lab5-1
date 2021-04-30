@@ -7,7 +7,30 @@ const canvas = document.getElementById("user-image");
 const ctx = canvas.getContext("2d");
 const clear = document.getElementById("button-group").childNodes[1];
 const read = document.getElementById("button-group").childNodes[3];
+const generate = form.childNodes[10];
+const synth = window.speechSynthesis;
+const voiceSelection = document.getElementById("voice-selection");
+let voices;
 ctx.font = "30px Arial";
+
+window.onload = (event) => {
+  voices = synth.getVoices();
+  voiceSelection.disabled = false;
+  voiceSelection.textContent = "";
+  for (let i = 0; i < voices.length; i++) {
+    console.log(voices[i].name);
+    const option = document.createElement("option");
+    option.textContent = voices[i].name + " (" + voices[i].lang + ")";
+
+    if (voices[i].default) {
+      option.textContent += " -- DEFAULT";
+    }
+
+    option.setAttribute("data-lang", voices[i].lang);
+    option.setAttribute("data-name", voices[i].name);
+    voiceSelection.appendChild(option);
+  }
+};
 
 selectedFile.addEventListener("change", handleFiles, false);
 function handleFiles() {
@@ -21,7 +44,7 @@ form.addEventListener("submit", (event) => {
   ctx.fillText(textTop, canvas.width / 2, 50);
   ctx.fillText(textBottom, canvas.width / 2, canvas.height - 20);
   // disable the generate button
-  form.childNodes[10].disabled = true;
+  generate.disabled = true;
   // enable the clear, read text, and voice selection select
   read.disabled = false;
   clear.disabled = false;
@@ -33,12 +56,28 @@ form.addEventListener("submit", (event) => {
 clear.onclick = () => {
   // clear canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
+  read.disabled = true;
+  clear.disabled = true;
+  generate.disabled = false;
 };
 
 // read click
 read.onclick = () => {
   let textTop = document.getElementById("text-top").value;
   let textBottom = document.getElementById("text-bottom").value;
+
+  console.log(voiceSelection);
+  var selectedOption = voiceSelection.selectedOptions[0].getAttribute(
+    "data-name"
+  );
+  console.log(selectedOption);
+  for (let i = 0; i < voices.length; i++) {
+    if (voices[i].name === selectedOption) {
+      textTop.voice = voices[i];
+      textBottom.voice = voices[i];
+    }
+  }
+
   // read
   let topUtter = new SpeechSynthesisUtterance(textTop);
   let bottomUtter = new SpeechSynthesisUtterance(textBottom);
