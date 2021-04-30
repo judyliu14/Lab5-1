@@ -5,6 +5,8 @@ const selectedFile = document.getElementById("image-input");
 const form = document.getElementById("generate-meme");
 const canvas = document.getElementById("user-image");
 const ctx = canvas.getContext("2d");
+const clear = document.getElementById("button-group").childNodes[1];
+const read = document.getElementById("button-group").childNodes[3];
 ctx.font = "30px Arial";
 
 selectedFile.addEventListener("change", handleFiles, false);
@@ -21,11 +23,28 @@ form.addEventListener("submit", (event) => {
   // disable the generate button
   form.childNodes[10].disabled = true;
   // enable the clear, read text, and voice selection select
-  document.getElementById("button-group").childNodes[1].disabled = false;
-  document.getElementById("button-group").childNodes[3].disabled = false;
+  read.disabled = false;
+  clear.disabled = false;
   document.getElementById("voice-selection").disabled = false;
   event.preventDefault(); // no refresh upon form submit
 });
+
+// on click
+clear.onclick = () => {
+  // clear canvas
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+};
+
+// read click
+read.onclick = () => {
+  let textTop = document.getElementById("text-top").value;
+  let textBottom = document.getElementById("text-bottom").value;
+  // read
+  let topUtter = new SpeechSynthesisUtterance(textTop);
+  let bottomUtter = new SpeechSynthesisUtterance(textBottom);
+  speechSynthesis.speak(topUtter);
+  speechSynthesis.speak(bottomUtter);
+};
 
 // Fires whenever the img object loads a new image (such as with img.src =)
 img.addEventListener("load", () => {
