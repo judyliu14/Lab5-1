@@ -6,7 +6,7 @@
 
 ## Part 1:
 
-LINK TO YOUR PUBLISHED SITE
+https://judyliu14.github.io/Lab5-1/
 
 ## Part 2:
 
