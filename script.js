@@ -10,7 +10,10 @@ const read = document.getElementById("button-group").childNodes[3];
 const generate = form.childNodes[10];
 const synth = window.speechSynthesis;
 const voiceSelection = document.getElementById("voice-selection");
+const volumeGroup = document.getElementById("volume-group").childNodes[3];
+const volumeImage = document.getElementById("volume-group").childNodes[1];
 let voices;
+let volume = 1;
 ctx.font = "30px Arial";
 
 window.onload = (event) => {
@@ -18,7 +21,6 @@ window.onload = (event) => {
   voiceSelection.disabled = false;
   voiceSelection.textContent = "";
   for (let i = 0; i < voices.length; i++) {
-    console.log(voices[i].name);
     const option = document.createElement("option");
     option.textContent = voices[i].name + " (" + voices[i].lang + ")";
 
@@ -52,6 +54,19 @@ form.addEventListener("submit", (event) => {
   event.preventDefault(); // no refresh upon form submit
 });
 
+volumeGroup.addEventListener("change", () => {
+  if (volumeGroup.value >= 67) {
+    volumeImage.src = "icons/volume-level-3.svg";
+  } else if (volumeGroup.value >= 34) {
+    volumeImage.src = "icons/volume-level-2.svg";
+  } else if (volumeGroup.value >= 1) {
+    volumeImage.src = "icons/volume-level-1.svg";
+  } else {
+    volumeImage.src = "icons/volume-level-0.svg";
+  }
+  volume = volumeGroup.value / 100;
+});
+
 // on click
 clear.onclick = () => {
   // clear canvas
@@ -69,11 +84,13 @@ read.onclick = () => {
   let topUtter = new SpeechSynthesisUtterance(textTop);
   let bottomUtter = new SpeechSynthesisUtterance(textBottom);
 
-  console.log(voiceSelection);
-  var selectedOption = voiceSelection.selectedOptions[0].getAttribute(
+  topUtter.volume = volume;
+  bottomUtter.volume = volume;
+
+  const selectedOption = voiceSelection.selectedOptions[0].getAttribute(
     "data-name"
   );
-  console.log(selectedOption);
+
   for (let i = 0; i < voices.length; i++) {
     if (voices[i].name === selectedOption) {
       topUtter.voice = voices[i];
