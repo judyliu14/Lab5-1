@@ -43,6 +43,7 @@ function handleFiles() {
 form.addEventListener("submit", (event) => {
   let textTop = document.getElementById("text-top").value;
   let textBottom = document.getElementById("text-bottom").value;
+  ctx.textAlign = "center";
   ctx.fillText(textTop, canvas.width / 2, 50);
   ctx.fillText(textBottom, canvas.width / 2, canvas.height - 20);
   // disable the generate button
